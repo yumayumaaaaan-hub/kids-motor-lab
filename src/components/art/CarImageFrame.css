@@ -1,0 +1,140 @@
+.car-display-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  isolation: isolate;
+}
+
+.car-display-frame__bay,
+.car-display-frame__platform,
+.car-display-frame__spotlight,
+.car-display-frame__rays {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+}
+
+.car-display-frame__bay {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+}
+
+.car-display-frame--bay-subtle .car-display-frame__bay {
+  opacity: 0.45;
+}
+
+.car-display-frame--bay-normal .car-display-frame__bay {
+  opacity: 0.72;
+}
+
+.car-display-frame--bay-strong .car-display-frame__bay {
+  opacity: 0.88;
+}
+
+.car-display-frame--locked .car-display-frame__bay {
+  opacity: 0.35;
+  filter: saturate(0.45);
+}
+
+.car-display-frame__spotlight {
+  inset: -8% -5%;
+  width: 110%;
+  height: 110%;
+  object-fit: contain;
+  object-position: center top;
+  opacity: 0.55;
+  z-index: 2;
+}
+
+.car-display-frame--showroom .car-display-frame__spotlight,
+.car-display-frame--reward .car-display-frame__spotlight {
+  opacity: 0.72;
+}
+
+.car-display-frame--garage.car-display-frame--completed .car-display-frame__spotlight {
+  opacity: 0.35;
+}
+
+.car-display-frame__spotlight.is-animating {
+  animation: car-spotlight-in var(--duration-normal) ease forwards;
+}
+
+.car-display-frame__rays {
+  inset: -12%;
+  width: 124%;
+  height: 124%;
+  left: 50%;
+  transform: translateX(-50%);
+  object-fit: contain;
+  opacity: 0.65;
+  z-index: 2;
+}
+
+.car-display-frame__rays.is-animating {
+  animation: car-rays-in var(--duration-normal) ease forwards;
+}
+
+@keyframes car-spotlight-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.72;
+  }
+}
+
+@keyframes car-rays-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.92);
+  }
+
+  to {
+    opacity: 0.65;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.car-display-frame__platform {
+  left: 50%;
+  bottom: 2%;
+  width: 82%;
+  transform: translateX(-50%);
+  object-fit: contain;
+  opacity: 0.85;
+  z-index: 3;
+}
+
+.car-display-frame--compact .car-display-frame__platform {
+  width: 78%;
+  opacity: 0.7;
+}
+
+.car-display-frame--showroom .car-display-frame__platform,
+.car-display-frame--reward .car-display-frame__platform {
+  width: 95%;
+  opacity: 0.9;
+}
+
+.car-display-frame--locked .car-display-frame__platform {
+  opacity: 0.35;
+}
+
+.car-display-frame__content {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .car-display-frame__spotlight.is-animating,
+  .car-display-frame__rays.is-animating {
+    animation: none;
+  }
+}

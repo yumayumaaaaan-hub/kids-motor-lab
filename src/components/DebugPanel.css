@@ -1,0 +1,48 @@
+.debug-panel {
+  padding: 10px 12px;
+  border: 1px dashed #c45d00;
+  border-radius: 12px;
+  background: #fff6ea;
+}
+
+.debug-panel-title {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #c45d00;
+}
+
+.debug-panel-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.debug-panel-button {
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid #e8c4a0;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #c45d00;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.debug-panel-button.danger {
+  border-color: #ff9f9f;
+  color: #c43030;
+}
+
+.debug-panel-info {
+  margin: 8px 0 0;
+  font-size: 0.75rem;
+  color: #8a6640;
+  word-break: break-all;
+}
+
+.debug-panel-button:focus-visible {
+  outline: 2px solid #c45d00;
+  outline-offset: 2px;
+}

@@ -1,0 +1,10 @@
+.collection-progress {
+  margin: 0;
+  font-size: clamp(0.9rem, 3.2vw, 1rem);
+  font-weight: 800;
+  color: #30456f;
+}
+
+.collection-progress--compact {
+  font-size: 0.85rem;
+}

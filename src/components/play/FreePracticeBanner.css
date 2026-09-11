@@ -1,0 +1,25 @@
+.free-practice-banner {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-blueprint-600);
+  text-align: center;
+}
+
+.free-practice-banner__en {
+  margin: 0 0 4px;
+  font-family: var(--font-family-en);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--color-blueprint-600);
+}
+
+.free-practice-banner__ja {
+  margin: 0;
+  font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-navy-900);
+  line-height: 1.45;
+}

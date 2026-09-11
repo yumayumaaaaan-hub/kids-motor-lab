@@ -1,0 +1,39 @@
+.hanamaru-visual {
+  display: block;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.hanamaru-visual--hero {
+  width: clamp(96px, 28vw, 140px);
+  height: clamp(96px, 28vw, 140px);
+  animation: hanamaru-pop-in var(--duration-fast) ease-out;
+}
+
+.hanamaru-visual--small {
+  width: clamp(60px, 18vw, 96px);
+  height: clamp(60px, 18vw, 96px);
+}
+
+.hanamaru-visual--tiny {
+  width: clamp(20px, 5vw, 32px);
+  height: clamp(20px, 5vw, 32px);
+}
+
+@keyframes hanamaru-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hanamaru-visual--hero {
+    animation: none;
+  }
+}

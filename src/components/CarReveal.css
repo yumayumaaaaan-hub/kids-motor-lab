@@ -1,0 +1,148 @@
+.car-build {
+  width: 100%;
+}
+
+.car-build-frame {
+  width: 100%;
+}
+
+.car-build-frame.car-display-frame {
+  aspect-ratio: var(--car-aspect-ratio);
+  min-height: 80px;
+}
+
+.car-build--compact .car-build-frame.car-display-frame {
+  min-height: 44px;
+}
+
+.car-build-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  border-radius: var(--radius-medium);
+  overflow: hidden;
+  background: transparent;
+}
+
+.car-build-image-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.car-build-image-layer--base .car-image-frame {
+  width: 100%;
+  height: 100%;
+}
+
+.car-build-image-layer--base .car-image,
+.car-build-image-layer--base img {
+  filter: grayscale(1) brightness(0.4);
+}
+
+.car-build-image-layer--color .car-image-frame {
+  width: 100%;
+  height: 100%;
+}
+
+.car-build--complete .car-build-image-layer--base .car-image,
+.car-build--complete .car-build-image-layer--base img {
+  filter: none;
+}
+
+.car-build-floor {
+  display: none;
+}
+
+.car-build-segment {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(40, 121, 199, 0.5) 0%,
+    rgba(16, 38, 63, 0.6) 100%
+  );
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  transition: opacity var(--duration-normal) ease, transform var(--duration-normal) ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.car-build-segment.is-revealed {
+  opacity: 0;
+  transform: translateX(-8%);
+}
+
+.car-build-segment.is-flashing {
+  animation: car-build-flash var(--duration-reward) ease-out;
+}
+
+@keyframes car-build-flash {
+  0% {
+    background: rgba(229, 180, 59, 0.45);
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.car-build-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: 4;
+  animation: car-shine-pass 2s ease-in-out 1;
+}
+
+@keyframes car-shine-pass {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.car-build-caption {
+  margin: var(--space-sm) 0 0;
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.car-build--compact .car-build-stage {
+  border-radius: var(--radius-label);
+}
+
+.car-build--showcase .car-build-frame.car-display-frame {
+  min-height: 160px;
+}
+
+.car-build--celebration .car-build-frame.car-display-frame {
+  min-height: 180px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .car-build-segment.is-flashing,
+  .car-build-shine {
+    animation: none;
+  }
+
+  .car-build-segment.is-revealed {
+    transform: none;
+  }
+}

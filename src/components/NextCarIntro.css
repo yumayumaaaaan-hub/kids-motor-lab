@@ -1,0 +1,88 @@
+.next-car-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--color-overlay-dark);
+}
+
+.next-car-intro-card {
+  width: min(92vw, 380px);
+  padding: 28px 22px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, var(--color-navy-700) 0%, var(--color-navy-900) 100%);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  color: #fff;
+}
+
+.next-car-intro-kicker {
+  margin: 0 0 8px;
+  font-family: var(--font-family-en);
+  font-size: var(--font-size-en-label);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--color-signal-orange);
+}
+
+.next-car-intro-title {
+  margin: 0 0 12px;
+  font-size: clamp(1.3rem, 5vw, 1.6rem);
+  font-weight: var(--font-weight-strong);
+  line-height: 1.5;
+  color: #fff;
+}
+
+.next-car-intro-subtitle {
+  margin: 0 0 20px;
+  font-size: clamp(1.05rem, 4vw, 1.2rem);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.next-car-intro-start {
+  width: 100%;
+  min-height: var(--button-height-lg);
+  margin-bottom: 10px;
+  border: none;
+  border-radius: var(--radius-medium);
+  background: var(--color-signal-orange);
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  box-shadow: var(--shadow-button-primary);
+}
+
+.next-car-intro-start:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-button-primary-active);
+}
+
+.next-car-intro-skip {
+  width: 100%;
+  min-height: var(--button-height);
+  border: none;
+  border-radius: var(--radius-small);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-normal);
+  cursor: pointer;
+}
+
+.next-car-intro-start:focus-visible,
+.next-car-intro-skip:focus-visible {
+  outline: 3px solid var(--color-signal-orange);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .next-car-intro-start:active {
+    transform: none;
+  }
+}

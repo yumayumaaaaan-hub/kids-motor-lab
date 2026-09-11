@@ -1,0 +1,334 @@
+.blueprint-assembly {
+  width: 100%;
+}
+
+.blueprint-assembly-note {
+  margin: 0 0 var(--space-xs);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.blueprint-assembly-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  width: 100%;
+  filter: drop-shadow(var(--shadow-sm));
+}
+
+.blueprint-part {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  min-height: 88px;
+  padding: 6px 4px 8px;
+  border: 1.5px solid var(--color-blueprint-line);
+  border-right-width: 0;
+  background-color: var(--color-blueprint-bg);
+  background-image:
+    linear-gradient(var(--color-blueprint-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-blueprint-grid) 1px, transparent 1px);
+  background-size: 10px 10px;
+  color: var(--color-blueprint);
+  text-align: center;
+  overflow: hidden;
+}
+
+.blueprint-part--first {
+  border-radius: var(--radius-label) 0 0 var(--radius-label);
+  border-left-width: 1.5px;
+}
+
+.blueprint-part--last {
+  border-radius: 0 var(--radius-label) var(--radius-label) 0;
+  border-right-width: 1.5px;
+}
+
+.blueprint-part-art {
+  display: none;
+}
+
+.blueprint-part .blueprint-artwork {
+  flex: 1;
+  width: 100%;
+  min-height: 28px;
+  margin: 2px 0;
+}
+
+.blueprint-part-code {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-blueprint-muted);
+  line-height: 1.2;
+}
+
+.blueprint-part-zone {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.blueprint-part-char {
+  font-size: clamp(1.15rem, 4.5vw, 1.45rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+.blueprint-part-next-label {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 800;
+}
+
+/* 獲得済み — ネイビープレート（VehicleBuildStatus と同系統） */
+.blueprint-part--acquired {
+  border-color: var(--color-navy-700);
+  background-color: transparent;
+  background-image: linear-gradient(
+    180deg,
+    var(--color-navy-700) 0%,
+    var(--color-navy-900) 100%
+  );
+  color: #ffffff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 1px 3px rgba(16, 38, 63, 0.22);
+}
+
+.blueprint-part--acquired .blueprint-part-code {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.blueprint-part--acquired .blueprint-part-zone {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.blueprint-part--acquired .blueprint-part-char {
+  color: #ffffff;
+}
+
+.blueprint-part--acquired .blueprint-part-art {
+  opacity: 1;
+}
+
+.blueprint-part--acquired .blueprint-artwork__image {
+  filter: brightness(1.65) saturate(0.45);
+}
+
+.blueprint-part-stamp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  padding: 2px 8px;
+  border: 2px solid var(--color-signal-orange);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-signal-orange);
+  font-size: 0.72rem;
+  font-weight: 800;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.blueprint-part-stamp--navy {
+  border-color: rgba(255, 255, 255, 0.85);
+  background: rgba(242, 140, 40, 0.92);
+  color: #ffffff;
+}
+
+.blueprint-part-stamp--animate {
+  animation: blueprint-stamp-in var(--duration-reward) ease-out forwards;
+}
+
+@keyframes blueprint-stamp-in {
+  0% {
+    transform: translate(-50%, -50%) rotate(-12deg) scale(1.35);
+    opacity: 0;
+  }
+
+  55% {
+    transform: translate(-50%, -50%) rotate(-12deg) scale(1.05);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(-12deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* 次に書く */
+.blueprint-part--current {
+  border-color: var(--color-accent);
+  border-width: 2px;
+  z-index: 1;
+  animation: blueprint-current-pulse 2.5s ease-in-out infinite;
+}
+
+.blueprint-part--current.blueprint-part--first {
+  border-left-width: 2px;
+}
+
+.blueprint-part--current.blueprint-part--last {
+  border-right-width: 2px;
+}
+
+@keyframes blueprint-current-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+/* まだ先 */
+.blueprint-part--upcoming {
+  opacity: 0.62;
+  filter: saturate(0.65);
+}
+
+.blueprint-part--upcoming .blueprint-part-art {
+  opacity: 0.45;
+}
+
+.blueprint-part--upcoming .blueprint-part-char {
+  color: var(--color-text-muted);
+}
+
+/* 演出用1枚 */
+.blueprint-part-single {
+  min-width: 120px;
+  min-height: 120px;
+  border-radius: var(--radius-medium);
+  border-right-width: 1.5px;
+  padding: 12px;
+}
+
+.blueprint-part-single .blueprint-part-art {
+  max-height: 40px;
+}
+
+.blueprint-part-single .blueprint-part-char {
+  font-size: clamp(1.8rem, 8vw, 2.4rem);
+}
+
+/* コンパクト（ヘッダー用） */
+.blueprint-assembly--compact .blueprint-part {
+  min-height: 56px;
+  padding: 4px 2px 6px;
+}
+
+.blueprint-assembly--compact .blueprint-part-code {
+  font-size: 0.48rem;
+}
+
+.blueprint-assembly--compact .blueprint-part-zone {
+  display: none;
+}
+
+.blueprint-assembly--compact .blueprint-part-art {
+  max-height: 18px;
+}
+
+.blueprint-assembly--compact .blueprint-part-char {
+  font-size: clamp(0.95rem, 3.8vw, 1.1rem);
+}
+
+.blueprint-assembly--compact .blueprint-part--current {
+  animation: none;
+}
+
+.blueprint-assembly--compact .blueprint-part-stamp {
+  font-size: 0.55rem;
+  padding: 1px 4px;
+}
+
+/* プレイ画面：シンプルな3文字表示 */
+.blueprint-assembly--play .blueprint-assembly-row {
+  filter: none;
+}
+
+.blueprint-assembly--play .blueprint-part--minimal {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  min-height: 36px;
+  padding: 4px 6px;
+  background: var(--color-surface);
+  background-image: none;
+  border-color: var(--color-border);
+}
+
+.blueprint-assembly--play .blueprint-part--minimal.blueprint-part--acquired {
+  border-color: var(--color-navy-700);
+  background: linear-gradient(
+    180deg,
+    var(--color-navy-700) 0%,
+    var(--color-navy-900) 100%
+  );
+  color: #ffffff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 1px 3px rgba(16, 38, 63, 0.22);
+}
+
+.blueprint-assembly--play .blueprint-part--minimal.blueprint-part--acquired .blueprint-part-char {
+  color: #ffffff;
+}
+
+.blueprint-assembly--play .blueprint-part--minimal.blueprint-part--current {
+  border-color: var(--color-signal-orange);
+  border-width: 2px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.blueprint-assembly--play .blueprint-part--minimal.blueprint-part--upcoming {
+  opacity: 0.5;
+  filter: none;
+}
+
+.blueprint-assembly--play .blueprint-part--minimal .blueprint-part-char {
+  font-size: clamp(1rem, 4.5vw, 1.2rem);
+  font-weight: var(--font-weight-strong);
+}
+
+.blueprint-assembly--play .blueprint-part--upcoming .blueprint-part-char {
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 768px) {
+  .blueprint-assembly--play .blueprint-part--minimal {
+    min-height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blueprint-part--current {
+    animation: none;
+  }
+
+  .blueprint-part-stamp--animate {
+    animation: none;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-12deg) scale(1);
+  }
+}

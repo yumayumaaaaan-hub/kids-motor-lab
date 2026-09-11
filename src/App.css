@@ -1,0 +1,254 @@
+.app {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  background-color: var(--color-background);
+  background-image:
+    linear-gradient(
+      var(--color-page-overlay-top),
+      var(--color-page-overlay-bottom)
+    ),
+    var(--art-garage-background);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--color-text);
+}
+
+.app--writing {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+/* PC：背景画像の左右余白が見えないよう、グラデーションで全体を均一に */
+@media (min-width: 768px) {
+  .app.app--writing {
+    background-image:
+      linear-gradient(
+        rgba(244, 242, 236, 0.9),
+        rgba(244, 242, 236, 0.96)
+      ),
+      var(--art-garage-background);
+    background-size: cover;
+    background-position: center 35%;
+  }
+}
+
+@media (max-width: 767px) {
+  .app {
+    background-image:
+      linear-gradient(
+        rgba(244, 242, 236, 0.92),
+        rgba(244, 242, 236, 0.97)
+      ),
+      var(--art-garage-background);
+  }
+}
+
+.app-main {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1280px);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: max(var(--space-sm), var(--safe-top))
+    max(var(--space-sm), var(--safe-right))
+    max(var(--space-sm), var(--safe-bottom))
+    max(var(--space-sm), var(--safe-left));
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.app--writing .app-main {
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  gap: 4px;
+  padding:
+    max(4px, var(--safe-top))
+    max(8px, var(--safe-right))
+    max(8px, env(safe-area-inset-bottom, 0px))
+    max(8px, var(--safe-left));
+}
+
+.play-layout {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-height: 0;
+}
+
+.play-layout--v3 {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.play-layout--v2 {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.play-layout--single {
+  flex: 1;
+  min-height: 0;
+}
+
+.play-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.game-play-area {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .app-main {
+    padding: var(--space-sm) var(--space-md);
+    gap: var(--space-xs);
+  }
+
+  .game-play-area {
+    flex: 1;
+    min-height: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .app-main {
+    padding: var(--space-lg) var(--space-xl);
+    gap: var(--space-md);
+  }
+
+  .app--writing .app-main {
+    padding:
+      max(4px, var(--safe-top))
+      max(12px, var(--safe-right))
+      max(8px, env(safe-area-inset-bottom, 0px))
+      max(12px, var(--safe-left));
+    gap: 4px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .app-main {
+    min-height: 100dvh;
+    padding: var(--space-sm) var(--space-lg);
+  }
+}
+
+.is-tutorial-active .app-main {
+  pointer-events: none;
+}
+
+.is-tutorial-active .tutorial-backdrop,
+.is-tutorial-active .tutorial-card-layer {
+  pointer-events: auto;
+}
+
+.tutorial-highlight-canvas .writing-canvas-wrap {
+  position: relative;
+  z-index: 410;
+  pointer-events: none;
+  box-shadow: 0 0 0 4px var(--color-primary), var(--shadow-lg);
+}
+
+.tutorial-highlight-complete .complete-button {
+  position: relative;
+  z-index: 410;
+  pointer-events: none;
+  box-shadow: 0 0 0 4px var(--color-accent), var(--shadow-lg);
+}
+
+.tutorial-highlight-mission .vehicle-build-status {
+  position: relative;
+  z-index: 410;
+  pointer-events: none;
+  box-shadow: 0 0 0 4px var(--color-blueprint-600), var(--shadow-lg);
+}
+
+.tutorial-highlight-canvas .writing-canvas-wrap--disabled,
+.tutorial-highlight-complete .action-buttons--disabled {
+  opacity: 1;
+}
+
+/* 描画エリア：旧ガレージ装飾は Design V2 で不使用 */
+
+/* 起動スプラッシュ */
+.app-boot {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: var(--space-lg);
+  background-color: var(--color-background);
+  background-image:
+    linear-gradient(
+      var(--color-page-overlay-top),
+      var(--color-page-overlay-bottom)
+    ),
+    var(--art-garage-background);
+  background-size: cover;
+  background-position: center;
+  color: var(--color-navy-900);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+}
+
+.app-boot-message {
+  margin: 0;
+  text-align: center;
+}
+
+/* 画面切り替えフェード */
+.app-screen-fade {
+  animation: app-screen-fade-in var(--duration-fast) ease;
+}
+
+@keyframes app-screen-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-screen-fade {
+    animation: none;
+  }
+}
+
+/* 描画中の集中モード（レイアウトは動かさない） */
+.is-drawing-focus .play-top-bar {
+  opacity: 0.82;
+  transition: opacity var(--duration-fast) ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-drawing-focus .play-top-bar {
+    transition: none;
+  }
+}

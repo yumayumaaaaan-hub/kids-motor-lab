@@ -1,0 +1,72 @@
+/* KIDS MOTOR LAB — 共通UIパターン */
+
+.lab-en-label {
+  display: inline-block;
+  font-family: var(--font-family-en);
+  font-size: var(--font-size-en-label);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-blue-gray-dark);
+  line-height: 1.2;
+}
+
+.lab-en-label--on-dark {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.lab-en-label--accent {
+  color: var(--color-signal-orange);
+}
+
+.lab-en-label--blueprint {
+  color: var(--color-blueprint-600);
+}
+
+.lab-en-label--inline {
+  margin-right: 6px;
+  padding: 2px 6px;
+  border-radius: var(--radius-label);
+  background: rgba(40, 121, 199, 0.1);
+  vertical-align: middle;
+}
+
+/* 車展示フレーム（CarImage / CarReveal 共通） */
+.car-showroom-frame {
+  background: var(--color-car-bg);
+  box-shadow: inset 0 0 0 1px rgba(16, 38, 63, 0.08);
+}
+
+/* 主ボタン（ActionButtons / Evaluation 共通） */
+.lab-btn-primary {
+  background: var(--color-signal-orange);
+  color: #fff;
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-button-primary);
+  border: none;
+  border-radius: var(--radius-small);
+  transition:
+    transform var(--duration-instant) ease,
+    box-shadow var(--duration-instant) ease,
+    background var(--duration-instant) ease;
+}
+
+.lab-btn-primary:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-button-primary-active);
+}
+
+.lab-btn-primary:disabled {
+  background: var(--color-text-disabled);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* 副ボタン */
+.lab-btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-navy-700);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+}

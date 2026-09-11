@@ -1,0 +1,19 @@
+.reward-backdrop {
+  position: relative;
+  width: 100%;
+}
+
+.reward-backdrop__inner {
+  position: relative;
+  z-index: 5;
+}
+
+.reward-backdrop .car-display-frame {
+  min-height: 180px;
+}
+
+.reward-backdrop .car-display-frame__content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

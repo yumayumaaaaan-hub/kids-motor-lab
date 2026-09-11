@@ -1,0 +1,20 @@
+.star-rating {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.star-rating-item {
+  display: inline-flex;
+  color: var(--color-text-disabled);
+}
+
+.star-rating-item--passed {
+  color: var(--color-primary);
+  opacity: 0.55;
+}
+
+.star-rating-item--excellent {
+  color: var(--color-excellent);
+  opacity: 1;
+}

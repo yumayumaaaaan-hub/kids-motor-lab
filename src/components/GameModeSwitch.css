@@ -1,0 +1,39 @@
+.game-mode-switch {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  width: 100%;
+  padding: 3px;
+  border-radius: var(--radius-small);
+  background: var(--color-border-light);
+}
+
+.game-mode-button {
+  min-height: 36px;
+  padding: 4px 6px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.game-mode-button.active {
+  background: var(--color-blueprint-600);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.game-mode-button:focus-visible {
+  outline: 3px solid var(--color-blueprint-600);
+  outline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+  .game-mode-button {
+    min-height: 38px;
+    font-size: 0.82rem;
+  }
+}

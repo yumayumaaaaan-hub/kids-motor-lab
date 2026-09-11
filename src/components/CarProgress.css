@@ -1,0 +1,94 @@
+.car-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(48, 69, 111, 0.08);
+}
+
+.car-progress-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.car-progress-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.car-progress-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #1f2a44;
+}
+
+.car-progress-detail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.car-progress-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #5a6478;
+}
+
+.car-progress-count {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #30456f;
+}
+
+.car-progress-status.unlocked {
+  margin: 8px 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ff7a18;
+}
+
+.car-character-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.car-character-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.car-character-name {
+  font-weight: 800;
+  color: #1f2a44;
+  min-width: 1.5em;
+}
+
+.car-character-status {
+  font-weight: 700;
+  color: #8a96a8;
+}
+
+.car-character-status.acquired {
+  color: #4a72e8;
+}
+
+.car-progress-next {
+  margin: 6px 0 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #30456f;
+}
+
+.car-progress .car-reveal {
+  margin-top: 8px;
+}

@@ -1,0 +1,212 @@
+.garage-collection-card {
+  width: 100%;
+  min-height: 112px;
+}
+
+.garage-collection-card-status-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-mint);
+  margin-bottom: var(--space-1);
+}
+
+.garage-collection-card-status-icon.active {
+  color: var(--color-blueprint-600);
+}
+
+.garage-collection-card-button {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  overflow: hidden;
+  text-align: left;
+  transition:
+    transform var(--duration-instant) ease,
+    box-shadow var(--duration-instant) ease,
+    border-color var(--duration-fast) ease;
+}
+
+.garage-collection-card--active .garage-collection-card-button {
+  border: 2px solid var(--color-signal-orange);
+  box-shadow: var(--shadow-md);
+}
+
+.garage-collection-card--completed .garage-collection-card-button {
+  border-color: var(--color-mint);
+  background: linear-gradient(90deg, var(--color-surface) 0%, var(--color-mint-bg) 100%);
+}
+
+.garage-collection-card--completed .garage-collection-card-button:not(:disabled):hover,
+.garage-collection-card--completed .garage-collection-card-button:not(:disabled):active {
+  box-shadow: var(--shadow-showcase);
+}
+
+.garage-collection-card--locked .garage-collection-card-button,
+.garage-collection-card--next .garage-collection-card-button {
+  cursor: not-allowed;
+  background: var(--color-garage-wall);
+  box-shadow: none;
+  border-color: var(--color-border-light);
+}
+
+.garage-collection-card-button:disabled {
+  cursor: not-allowed;
+}
+
+.garage-collection-card-button:not(:disabled):active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-press);
+}
+
+.garage-collection-card-button:focus-visible {
+  outline: 3px solid var(--color-blueprint-600);
+  outline-offset: 2px;
+}
+
+.garage-collection-card-media {
+  position: relative;
+  flex: 0 0 42%;
+  max-width: 160px;
+  min-height: 96px;
+  padding: var(--space-sm);
+  background: var(--color-car-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.garage-collection-card--locked .garage-collection-card-media,
+.garage-collection-card--next .garage-collection-card-media {
+  background: var(--color-garage-floor);
+}
+
+.garage-collection-card-spotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.65) 0%, transparent 62%);
+  pointer-events: none;
+}
+
+.garage-collection-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-md);
+  min-width: 0;
+  min-height: 96px;
+}
+
+.garage-collection-card-no {
+  margin: 0;
+  font-family: var(--font-family-en);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.garage-collection-card-maker {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-muted);
+}
+
+.garage-collection-card-name {
+  margin: 0;
+  font-size: clamp(1rem, 3.5vw, 1.15rem);
+  font-weight: var(--font-weight-strong);
+  color: var(--color-navy-900);
+  line-height: 1.25;
+}
+
+.garage-collection-card-stamp {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-mint);
+}
+
+.garage-collection-card-badge {
+  margin: 4px 0 0;
+  font-family: var(--font-family-en);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.garage-collection-card-badge.active {
+  color: var(--color-blueprint-600);
+}
+
+.garage-collection-card-badge.next {
+  color: var(--color-signal-orange);
+}
+
+.garage-collection-card-badge.locked {
+  color: var(--color-text-disabled);
+}
+
+.garage-collection-card-meta {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-secondary);
+}
+
+.garage-collection-card-next {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-signal-orange);
+}
+
+.garage-collection-card-cta {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-label);
+  background: var(--color-signal-orange);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: var(--font-weight-medium);
+  align-self: flex-start;
+}
+
+.garage-collection-card-locked-hint {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  font-weight: var(--font-weight-normal);
+  line-height: 1.45;
+  color: var(--color-text-disabled);
+  white-space: pre-line;
+}
+
+.garage-collection-card-arrow {
+  flex-shrink: 0;
+  align-self: center;
+  margin-right: var(--space-sm);
+  color: var(--color-text-muted);
+}
+
+.garage-collection-card--active .garage-collection-card-arrow {
+  color: var(--color-signal-orange);
+}
+
+@media (min-width: 768px) {
+  .garage-collection-card-media {
+    flex-basis: 38%;
+    max-width: 180px;
+    min-height: 108px;
+  }
+}

@@ -1,0 +1,18 @@
+.today-stats-title {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--color-text-secondary);
+}
+
+.today-stats-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.today-stats-hanamaru {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

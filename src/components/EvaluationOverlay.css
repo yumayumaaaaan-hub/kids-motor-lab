@@ -1,0 +1,453 @@
+.evaluation-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  background: var(--color-overlay);
+}
+
+.evaluation-card {
+  position: relative;
+  width: min(calc(100vw - 32px), 420px);
+  max-height: min(92vh, 640px);
+  overflow-y: auto;
+  padding: 28px 22px;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.evaluation-card--excellent {
+  background: linear-gradient(180deg, var(--color-gold-bg) 0%, var(--color-surface) 72%);
+  border: 1px solid rgba(229, 180, 59, 0.35);
+}
+
+.evaluation-card--passed {
+  background: linear-gradient(180deg, #fff8f0 0%, var(--color-blueprint-100) 100%);
+  border: 1px solid rgba(40, 121, 199, 0.2);
+}
+
+.evaluation-card--retry {
+  background: linear-gradient(180deg, var(--color-blueprint-100) 0%, var(--color-surface) 100%);
+  border: 1px solid rgba(40, 121, 199, 0.25);
+}
+
+.evaluation-card--unlock {
+  background: linear-gradient(180deg, var(--color-surface-warm) 0%, var(--color-blueprint-100) 100%);
+  border: 1px solid rgba(40, 121, 199, 0.2);
+}
+
+.evaluation-icon {
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.evaluation-icon--hanamaru {
+  color: var(--color-gold);
+}
+
+.evaluation-icon--check {
+  color: var(--color-signal-orange);
+}
+
+.evaluation-icon--guide {
+  color: var(--color-blueprint-600);
+}
+
+.evaluation-decor {
+  position: absolute;
+  inset: 12px;
+  pointer-events: none;
+  color: var(--color-gold);
+  opacity: 0.35;
+}
+
+.evaluation-hanamaru-ring {
+  width: 100%;
+  height: 100%;
+}
+
+.evaluation-star {
+  position: absolute;
+  font-size: 0.85rem;
+}
+
+.evaluation-star--1 {
+  top: 8%;
+  left: 12%;
+}
+
+.evaluation-star--2 {
+  top: 6%;
+  right: 14%;
+}
+
+.evaluation-star--3 {
+  bottom: 12%;
+  left: 18%;
+}
+
+.evaluation-title {
+  margin: 0 0 12px;
+  font-size: clamp(1.5rem, 6vw, 1.9rem);
+  font-weight: var(--font-weight-strong);
+}
+
+.evaluation-title.excellent {
+  color: var(--color-gold);
+}
+
+.evaluation-title.pass {
+  color: var(--color-signal-orange);
+}
+
+.evaluation-title.retry {
+  color: var(--color-blueprint-600);
+}
+
+.evaluation-title.unlock {
+  color: var(--color-navy-900);
+}
+
+.evaluation-subtitle {
+  margin: 0 0 10px;
+  font-size: clamp(1.05rem, 4vw, 1.25rem);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.evaluation-subtitle--multiline {
+  white-space: pre-line;
+}
+
+.evaluation-reward {
+  margin: 0 0 18px;
+  font-size: clamp(1rem, 3.8vw, 1.15rem);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.evaluation-badge {
+  margin: 12px 0 8px;
+  font-size: clamp(1.2rem, 4.5vw, 1.5rem);
+  font-weight: var(--font-weight-strong);
+  color: var(--color-gold);
+}
+
+.evaluation-hint {
+  margin: 0 0 18px;
+  font-size: clamp(1.05rem, 4vw, 1.2rem);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.evaluation-help-note {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-blueprint-600);
+}
+
+.evaluation-actions {
+  display: grid;
+  gap: 10px;
+}
+
+@media (max-width: 359px) {
+  .evaluation-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.evaluation-button {
+  min-height: var(--button-height-lg);
+  border: none;
+  border-radius: var(--radius-medium);
+  font-size: 1.05rem;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition:
+    transform var(--duration-instant) ease,
+    box-shadow var(--duration-instant) ease;
+}
+
+.evaluation-button.primary {
+  background: var(--color-blueprint-600);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.evaluation-button--next-car {
+  background: var(--color-signal-orange);
+  color: #ffffff;
+  font-size: clamp(1.15rem, 4.5vw, 1.35rem);
+  min-height: var(--button-height-lg);
+  box-shadow: var(--shadow-button-primary);
+}
+
+.evaluation-button--next-car:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-button-primary-active);
+}
+
+.evaluation-button.secondary {
+  background: var(--color-surface);
+  color: var(--color-navy-700);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
+.evaluation-button.wide {
+  width: 100%;
+}
+
+.evaluation-button:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-press);
+}
+
+.evaluation-button:focus-visible {
+  outline: 3px solid var(--color-blueprint-600);
+  outline-offset: 2px;
+}
+
+.evaluation-fly-layer {
+  position: relative;
+  height: 120px;
+  margin: 12px 0;
+}
+
+.blueprint-card-flying {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  animation: blueprint-fly-to-car var(--duration-reward) ease-in forwards;
+}
+
+@keyframes blueprint-fly-to-car {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -220%) scale(0.35);
+    opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blueprint-card-flying {
+    animation: none;
+  }
+}
+
+.evaluation-debug {
+  margin: 12px 0 0;
+  padding: 10px;
+  border-radius: var(--radius-small);
+  background: var(--color-surface-muted);
+  font-size: 0.75rem;
+  text-align: left;
+  color: var(--color-text-muted);
+}
+
+.evaluation-debug p {
+  margin: 2px 0;
+}
+
+.evaluation-overlay--spotlight {
+  background: linear-gradient(180deg, var(--color-navy-900) 0%, var(--color-overlay-dark) 100%);
+}
+
+.evaluation-overlay--spotlight .evaluation-card--unlock {
+  background: rgba(16, 38, 63, 0.72);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.evaluation-overlay--spotlight .evaluation-subtitle,
+.evaluation-overlay--spotlight .evaluation-reward,
+.evaluation-overlay--spotlight .evaluation-hint,
+.evaluation-overlay--spotlight .evaluation-help-note {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.evaluation-overlay--spotlight .evaluation-title.pass,
+.evaluation-overlay--spotlight .evaluation-title.excellent,
+.evaluation-overlay--spotlight .evaluation-title.unlock {
+  color: #fff;
+}
+
+.evaluation-overlay--spotlight .evaluation-title.excellent {
+  color: var(--color-gold);
+}
+
+.evaluation-overlay--spotlight .evaluation-title.pass {
+  color: var(--color-signal-orange);
+}
+
+.evaluation-overlay--spotlight .evaluation-badge {
+  color: var(--color-gold);
+}
+
+.evaluation-overlay--spotlight .evaluation-all-complete {
+  color: var(--color-gold);
+}
+
+.evaluation-completed-car-maker {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-normal);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.evaluation-completed-car-name {
+  margin: 2px 0 16px;
+  font-size: clamp(1.2rem, 4.8vw, 1.5rem);
+  font-weight: var(--font-weight-strong);
+  color: #fff;
+  line-height: 1.3;
+}
+
+.evaluation-overlay--spotlight .evaluation-completed-car-maker,
+.evaluation-overlay--spotlight .evaluation-completed-car-name {
+  color: #fff;
+}
+
+.evaluation-overlay--spotlight .evaluation-completed-car-maker {
+  opacity: 0.78;
+}
+
+.evaluation-next-car-block {
+  margin: 4px 0 20px;
+}
+
+.evaluation-overlay--spotlight .evaluation-car-name {
+  color: #fff;
+}
+
+.evaluation-overlay--spotlight .evaluation-car-maker {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.evaluation-overlay--spotlight .evaluation-garage-hint {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.evaluation-completion-emblem {
+  margin: 0 auto 8px;
+}
+
+.evaluation-completion-emblem .motor-lab-brand__emblem {
+  width: 40px;
+  height: 40px;
+}
+
+.evaluation-unlock-kicker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-medium);
+  color: #fff;
+}
+
+.evaluation-overlay--spotlight .evaluation-car-spotlight {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.evaluation-overlay--spotlight .evaluation-car-spotlight::after {
+  display: none;
+}
+
+.evaluation-car-spotlight {
+  position: relative;
+  margin: 0 auto 12px;
+  padding: 16px 12px 28px;
+  border-radius: var(--radius-large);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.92) 0%, transparent 52%),
+    var(--color-car-bg);
+  box-shadow: inset 0 0 0 1px rgba(16, 38, 63, 0.08);
+}
+
+.evaluation-car-spotlight::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  width: 70%;
+  height: 12px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgba(16, 38, 63, 0.12);
+  pointer-events: none;
+}
+
+.evaluation-car-maker {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-muted);
+}
+
+.evaluation-car-name {
+  margin: 4px 0 0;
+  font-size: clamp(1.35rem, 5vw, 1.65rem);
+  font-weight: var(--font-weight-strong);
+  color: var(--color-navy-900);
+}
+
+.evaluation-garage-hint {
+  margin: 8px 0 0;
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-secondary);
+}
+
+.evaluation-garage-register {
+  margin: 0 auto 12px;
+  max-width: 160px;
+  animation: garage-shrink-in var(--duration-normal) ease-out;
+}
+
+@keyframes garage-shrink-in {
+  from {
+    transform: scale(1.08);
+    opacity: 0.6;
+  }
+
+  to {
+    transform: scale(0.85);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .evaluation-garage-register {
+    animation: none;
+  }
+
+  .evaluation-button--next-car:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+.evaluation-all-complete {
+  margin: 12px 0;
+  font-size: clamp(1.1rem, 4vw, 1.3rem);
+  font-weight: var(--font-weight-strong);
+  color: var(--color-gold);
+}

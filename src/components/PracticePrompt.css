@@ -1,0 +1,19 @@
+.practice-prompt {
+  text-align: center;
+  padding: 4px 0 0;
+}
+
+.practice-prompt-label {
+  margin: 0 0 4px;
+  font-size: clamp(0.9rem, 3.2vw, 1rem);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-muted);
+}
+
+.practice-prompt-character {
+  margin: 0;
+  font-size: clamp(3rem, 14vw, 4.5rem);
+  font-weight: var(--font-weight-strong);
+  line-height: 1;
+  color: var(--color-navy-900);
+}

@@ -1,0 +1,133 @@
+.writing-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  container-type: size;
+}
+
+.writing-canvas-wrap--help {
+  outline: 2px solid var(--color-blueprint-600);
+  outline-offset: 0;
+  border-radius: 14px;
+}
+
+.writing-canvas-wrap--disabled {
+  pointer-events: none;
+}
+
+.writing-canvas-square {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  /* 親の幅・高さの小さい方に収まる正方形 */
+  width: min(100cqw, 100cqh, 640px);
+  max-width: 100%;
+  max-height: 100%;
+  min-width: min(240px, 100%);
+  min-height: min(240px, 100%);
+  aspect-ratio: 1;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  flex-shrink: 1;
+}
+
+.writing-canvas-mission {
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 2rem;
+  padding: 4px 8px;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid rgba(26, 59, 93, 0.08);
+  flex-shrink: 0;
+}
+
+.writing-canvas-mission__assist {
+  font-size: 0.68rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-blueprint-600);
+  line-height: 1.2;
+}
+
+.writing-canvas-mission__label {
+  font-size: clamp(0.82rem, 3vw, 0.95rem);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-navy-700);
+  line-height: 1.2;
+}
+
+.writing-canvas-mission__char {
+  font-size: clamp(1rem, 3.8vw, 1.15rem);
+  font-weight: var(--font-weight-strong);
+  color: var(--color-navy-900);
+}
+
+.writing-canvas-mission__hint {
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-normal);
+  color: var(--color-blueprint-600);
+  line-height: 1.2;
+}
+
+.writing-canvas-stage {
+  position: relative;
+  min-height: 0;
+  background: #ffffff;
+}
+
+.writing-canvas-content {
+  position: absolute;
+  inset: 3%;
+}
+
+.writing-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+  background: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* container query 非対応ブラウザ向け */
+@supports not (width: 1cqw) {
+  .writing-canvas-square {
+    width: min(100%, 640px);
+    height: auto;
+  }
+
+  .writing-canvas-content {
+    inset: 3%;
+  }
+}
+
+@media (min-width: 768px) {
+  .writing-canvas-square {
+    width: min(100cqw, 100cqh, 640px);
+  }
+}
+
+@media (min-width: 768px) and (orientation: portrait) {
+  .writing-canvas-square {
+    width: min(100cqw, 100cqh, 600px);
+  }
+}

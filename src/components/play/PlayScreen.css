@@ -1,0 +1,170 @@
+.play-screen--v3 {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.play-screen--v3 .vehicle-build-status {
+  width: 100%;
+}
+
+.play-screen__workspace {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.play-screen__board {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+  container-type: size;
+}
+
+/* タブレット：レイアウト確定前に cqh が 0 にならないよう最低高さを確保 */
+@media (min-width: 768px) {
+  .play-screen__board {
+    min-height: clamp(320px, 52vh, 560px);
+  }
+}
+
+.play-screen__board .writing-canvas-wrap {
+  width: min(100cqw, 100%);
+  height: min(100cqh, 100%);
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.play-screen__workspace .action-buttons {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* タブレット・PC：2カラム（左=車、右=描画） */
+@media (min-width: 768px) {
+  .play-screen--v3 {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 12px;
+    max-width: min(1100px, 100%);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .play-screen--v3 .vehicle-build-status {
+    flex: 0 0 clamp(200px, 24vw, 240px);
+    flex-direction: column;
+    align-items: stretch;
+    align-self: flex-start;
+    max-height: none;
+    min-height: 0;
+    height: auto;
+    padding: var(--space-sm);
+  }
+
+  .play-screen--v3 .vehicle-build-status__media {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  .play-screen--v3 .vehicle-build-status__body {
+    flex: 0 0 auto;
+  }
+
+  .play-screen__workspace {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  /* キャンバスを左寄せ（高さは board いっぱいを維持） */
+  .play-screen__board {
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .play-screen__board .writing-canvas-wrap {
+    width: min(100cqw, 100%);
+    height: min(100cqh, 100%);
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0;
+  }
+}
+
+/* スマホ横画面 */
+@media (orientation: landscape) and (max-height: 520px) {
+  .play-screen--v3 {
+    flex-direction: row;
+    gap: var(--space-xs);
+  }
+
+  .play-screen--v3 .vehicle-build-status {
+    flex: 0 0 min(34vw, 180px);
+    max-height: none;
+  }
+
+  .play-screen__workspace {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: var(--space-xs);
+    align-items: stretch;
+  }
+
+  .play-screen__board {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    min-height: 0;
+  }
+
+  .play-screen__workspace .action-buttons {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: stretch;
+    justify-content: flex-start;
+    max-width: 120px;
+  }
+
+  .play-screen__workspace .action-buttons-toolbar {
+    grid-template-columns: 1fr;
+  }
+}
+
+.is-drawing-focus .play-screen--v3 .vehicle-build-status {
+  opacity: 0.85;
+  transition: opacity var(--duration-fast) ease;
+}
+
+.is-drawing-focus .play-screen__board,
+.is-drawing-focus .play-screen__workspace .action-buttons {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-drawing-focus .play-screen--v3 .vehicle-build-status {
+    transition: none;
+  }
+}
+
+.tutorial-highlight-mission .vehicle-build-status {
+  position: relative;
+  z-index: 410;
+  pointer-events: none;
+  box-shadow: 0 0 0 4px var(--color-blueprint-600), var(--shadow-lg);
+}

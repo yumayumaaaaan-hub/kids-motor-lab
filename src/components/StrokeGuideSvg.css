@@ -1,0 +1,11 @@
+.stroke-guide-svg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.stroke-guide-svg svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
