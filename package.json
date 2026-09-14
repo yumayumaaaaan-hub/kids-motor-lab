@@ -11,7 +11,7 @@
     "dev": "vite --host",
     "dev:local": "powershell -ExecutionPolicy Bypass -File scripts/start-dev.ps1",
     "deploy:cf": "powershell -Command \"$env:CF_PAGES='1'; npm run build; npx wrangler pages deploy dist --project-name=kids-motor-lab\"",
-    "build": "tsc -b && vite build",
+    "build": "node scripts/clean-dist.mjs && tsc -b && vite build",
     "preview": "vite preview --host"
   },
   "dependencies": {
