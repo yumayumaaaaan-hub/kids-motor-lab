@@ -1,14 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig(({ mode }) => ({
-  // GitHub Pages: /kids-motor-lab/  /  Cloudflare Pages: /
-  base:
-    process.env.CF_PAGES === '1'
-      ? '/'
-      : mode === 'production'
-        ? '/kids-motor-lab/'
-        : '/',
+export default defineConfig(() => ({
+  // GitHub Pages だけ /kids-motor-lab/（Cloudflare Workers は /）
+  base: process.env.GITHUB_PAGES === '1' ? '/kids-motor-lab/' : '/',
   plugins: [react()],
   server: {
     // 同じ Wi-Fi 内のスマホ・タブレットからアクセスできるようにする

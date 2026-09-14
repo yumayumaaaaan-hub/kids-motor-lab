@@ -27,8 +27,6 @@ jobs:
 
       - name: Build for Cloudflare Pages
         run: npm run build
-        env:
-          CF_PAGES: '1'
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
