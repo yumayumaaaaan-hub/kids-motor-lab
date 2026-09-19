@@ -25,7 +25,6 @@ export function buildDebugEvaluationPreview(
       reward: { kind: 'none' },
       character,
       helpModeActive: false,
-      newBadges: [],
     };
   }
 
@@ -41,7 +40,6 @@ export function buildDebugEvaluationPreview(
       },
       character,
       helpModeActive: false,
-      newBadges: [],
     };
   }
 
@@ -51,7 +49,6 @@ export function buildDebugEvaluationPreview(
       reward: { kind: 'unlock', car },
       character,
       helpModeActive: false,
-      newBadges: [],
     };
   }
 
@@ -60,6 +57,5 @@ export function buildDebugEvaluationPreview(
     reward: { kind: 'none' },
     character,
     helpModeActive: false,
-    newBadges: [],
   };
 }

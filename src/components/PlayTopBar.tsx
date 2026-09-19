@@ -1,5 +1,7 @@
-import { cars } from '../data/cars';
-import { getCompletedCarCount } from '../utils/carProgressUtils';
+import {
+  getCompletedCollectionCount,
+  getTotalCollectionCount,
+} from '../utils/carProgressUtils';
 import type { SavedProgress } from '../types/gameProgress';
 import { MotorLabBrand } from './art/MotorLabBrand';
 import { IconGarage } from './icons/GameIcon';
@@ -16,8 +18,8 @@ export function PlayTopBar({
   progress,
   onOpenGarage,
 }: PlayTopBarProps) {
-  const completed = getCompletedCarCount(progress);
-  const total = cars.length;
+  const completed = getCompletedCollectionCount(progress);
+  const total = getTotalCollectionCount();
 
   return (
     <header className="play-top-bar" aria-label="ナビゲーション">

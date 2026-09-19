@@ -6,7 +6,7 @@ import {
   areAllCarsCompleted,
   getActiveCar,
   getCarDisplayStatus,
-  getCompletedCarCount,
+  getCompletedCollectionCount,
   getNextCarAfter,
   getNextUnlockedCar,
   isCarCompleted,
@@ -17,7 +17,7 @@ import {
 export function useCarProgress(progress: SavedProgress) {
   const activeCar = useMemo(() => getActiveCar(progress), [progress]);
   const completedCount = useMemo(
-    () => getCompletedCarCount(progress),
+    () => getCompletedCollectionCount(progress),
     [progress],
   );
   const allCompleted = useMemo(

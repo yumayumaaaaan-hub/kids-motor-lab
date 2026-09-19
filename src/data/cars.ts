@@ -17,7 +17,7 @@ export type Car = {
   imageLicense?: string;
 };
 
-/** nenchu-car-get の全200台（外国車1〜100 + 日本車101〜200） */
+/** nenchu-car-get の通常車200台（外国車1〜100 + 日本車101〜200）。スペシャル車は別管理 */
 export const cars: Car[] = [
   {
     id: 'bmw-3-series',

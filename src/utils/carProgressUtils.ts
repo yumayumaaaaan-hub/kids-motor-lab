@@ -1,4 +1,8 @@
 import { cars, getCarById, getCarsByUnlockOrder } from '../data/cars';
+import {
+  getUnlockedSpecialCarCount,
+  SPECIAL_CAR_COUNT,
+} from '../data/specialChallenge';
 import type { Car } from '../data/cars';
 import type {
   CarDisplayStatus,
@@ -109,11 +113,21 @@ export function getActiveCar(progress: SavedProgress): Car {
   return getCarById(id) ?? getCarsByUnlockOrder()[0];
 }
 
-/** 完成台数 */
+/** 完成した通常車の台数（スペシャル解放条件にも使う） */
 export function getCompletedCarCount(progress: SavedProgress): number {
   return getCarsByUnlockOrder().filter((car) =>
     isCarCompleted(car, progress.cars[car.id]),
   ).length;
+}
+
+/** 通常車 + スペシャル車の総台数 */
+export function getTotalCollectionCount(): number {
+  return cars.length + SPECIAL_CAR_COUNT;
+}
+
+/** 通常車 + 獲得済みスペシャル車の台数 */
+export function getCompletedCollectionCount(progress: SavedProgress): number {
+  return getCompletedCarCount(progress) + getUnlockedSpecialCarCount(progress);
 }
 
 /** ガレージ表示用ステータス */
@@ -169,9 +183,9 @@ export function getCharacterStatusLabel(
   return 'まだ';
 }
 
-/** 全車完成か */
+/** 通常車とスペシャル車をすべて完成したか */
 export function areAllCarsCompleted(progress: SavedProgress): boolean {
-  return getCompletedCarCount(progress) >= cars.length;
+  return getCompletedCollectionCount(progress) >= getTotalCollectionCount();
 }
 
 /** 最初に locked の車（次に解放される候補） */

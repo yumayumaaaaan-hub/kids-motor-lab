@@ -1,5 +1,7 @@
-import { cars } from '../data/cars';
-import { getCompletedCarCount } from '../utils/carProgressUtils';
+import {
+  getCompletedCollectionCount,
+  getTotalCollectionCount,
+} from '../utils/carProgressUtils';
 import type { SavedProgress } from '../types/gameProgress';
 import './CollectionProgress.css';
 
@@ -15,8 +17,8 @@ export function CollectionProgress({
   label = 'くるま',
   compact = false,
 }: CollectionProgressProps) {
-  const completed = getCompletedCarCount(progress);
-  const total = cars.length;
+  const completed = getCompletedCollectionCount(progress);
+  const total = getTotalCollectionCount();
 
   return (
     <p

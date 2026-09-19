@@ -12,14 +12,11 @@ type ActionButtonsProps = {
   canComplete: boolean;
   isEvaluating: boolean;
   helpModeActive: boolean;
-  strokeOrderButtonVisible?: boolean;
   interactionDisabled?: boolean;
   onToggleGuide: () => void;
-  onToggleStrokeOrder: () => void;
   onUndo: () => void;
   onClearAll: () => void;
   onComplete: () => void;
-  onPlayGuideAnimation: () => void;
 };
 
 export function ActionButtons({
@@ -29,14 +26,11 @@ export function ActionButtons({
   canComplete,
   isEvaluating,
   helpModeActive,
-  strokeOrderButtonVisible = false,
   interactionDisabled = false,
   onToggleGuide,
-  onToggleStrokeOrder,
   onUndo,
   onClearAll,
   onComplete,
-  onPlayGuideAnimation,
 }: ActionButtonsProps) {
   const completeReady = canComplete && !isEvaluating && !interactionDisabled;
   const toolsDisabled = interactionDisabled || isEvaluating;
@@ -54,17 +48,6 @@ export function ActionButtons({
       className={`action-buttons ${interactionDisabled ? 'action-buttons--disabled' : ''}`}
       aria-label="操作ボタン"
     >
-      {(strokeOrderButtonVisible || helpModeActive) && !showStrokeOrder && (
-        <button
-          type="button"
-          className="action-button help-animation-button"
-          onClick={onPlayGuideAnimation}
-          disabled={toolsDisabled}
-        >
-          かきじゅんを みる
-        </button>
-      )}
-
       <div className="action-buttons-toolbar">
         <button
           type="button"
@@ -101,17 +84,6 @@ export function ActionButtons({
           </span>
         </button>
       </div>
-
-      <button
-        type="button"
-        className={`action-button secondary stroke-order-toggle ${showStrokeOrder ? 'is-on' : 'is-off'}`}
-        onClick={onToggleStrokeOrder}
-        disabled={toolsDisabled}
-        aria-pressed={showStrokeOrder}
-        aria-disabled={toolsDisabled}
-      >
-        {showStrokeOrder ? 'かきじゅん ON' : 'かきじゅん OFF'}
-      </button>
 
       <button
         type="button"

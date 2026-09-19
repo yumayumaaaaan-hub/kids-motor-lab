@@ -19,7 +19,6 @@ type PlayScreenProps = {
   showGuide: boolean;
   showStrokeOrder: boolean;
   helpModeActive: boolean;
-  strokeOrderButtonVisible?: boolean;
   helpHint?: string;
   canComplete: boolean;
   isEvaluating: boolean;
@@ -30,11 +29,9 @@ type PlayScreenProps = {
   acquirePulse?: AcquirePulseToken | null;
   writingCanvasRef: RefObject<WritingCanvasHandle | null>;
   onToggleGuide: () => void;
-  onToggleStrokeOrder: () => void;
   onUndo: () => void;
   onClearAll: () => void;
   onComplete: () => void;
-  onPlayGuideAnimation: () => void;
   onDrawingStateChange: (isDrawing: boolean) => void;
   onStrokeStart: () => void;
   onStrokeComplete: (stroke: Stroke) => void;
@@ -51,7 +48,6 @@ export function PlayScreen({
   showGuide,
   showStrokeOrder,
   helpModeActive,
-  strokeOrderButtonVisible = false,
   helpHint,
   canComplete,
   isEvaluating,
@@ -62,11 +58,9 @@ export function PlayScreen({
   acquirePulse = null,
   writingCanvasRef,
   onToggleGuide,
-  onToggleStrokeOrder,
   onUndo,
   onClearAll,
   onComplete,
-  onPlayGuideAnimation,
   onDrawingStateChange,
   onStrokeStart,
   onStrokeComplete,
@@ -132,14 +126,11 @@ export function PlayScreen({
           canComplete={effectiveCanComplete}
           isEvaluating={effectiveEvaluating}
           helpModeActive={effectiveHelpMode}
-          strokeOrderButtonVisible={strokeOrderButtonVisible}
           interactionDisabled={interactionDisabled}
           onToggleGuide={onToggleGuide}
-          onToggleStrokeOrder={onToggleStrokeOrder}
           onUndo={onUndo}
           onClearAll={onClearAll}
           onComplete={onComplete}
-          onPlayGuideAnimation={onPlayGuideAnimation}
         />
       </div>
     </div>

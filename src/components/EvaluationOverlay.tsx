@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { cars } from '../data/cars';
 import type { Car } from '../data/cars';
+import { getTotalCollectionCount } from '../utils/carProgressUtils';
 import type { EvaluationDisplayResult } from '../types/gameProgress';
 import type { PrimaryHint } from '../types/writingEvaluation';
 import { animationConfig } from '../config/animationConfig';
@@ -27,7 +27,6 @@ type EvaluationOverlayProps = {
   nextCar: Car | null;
   isAllCarsComplete: boolean;
   onRetry: () => void;
-  onShowGuide: () => void;
   onNext: () => void;
   onGoGarage: () => void;
   onStartNextCar: () => void;
@@ -144,7 +143,6 @@ export function EvaluationOverlay({
   nextCar,
   isAllCarsComplete,
   onRetry,
-  onShowGuide,
   onNext,
   onGoGarage,
   onStartNextCar,
@@ -288,9 +286,6 @@ export function EvaluationOverlay({
             <button type="button" className="evaluation-button primary" onClick={onRetry}>
               もういちど
             </button>
-            <button type="button" className="evaluation-button secondary" onClick={onShowGuide}>
-              かきじゅんを みる
-            </button>
           </div>
         </div>
       </div>
@@ -383,7 +378,7 @@ export function EvaluationOverlay({
 
               {isAllCarsComplete ? (
                 <p className="evaluation-all-complete">
-                  {cars.length}だい ぜんぶ ゲットしたよ！
+                  {getTotalCollectionCount()}だい ぜんぶ ゲットしたよ！
                 </p>
               ) : (
                 nextCar && (

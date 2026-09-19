@@ -1,5 +1,9 @@
 import { hiraganaList } from '../data/hiraganaCharacters';
 import { cars, getCarById, getCarsByUnlockOrder, legacyFirstCarIds } from '../data/cars';
+import {
+  getSpecialChallengeById,
+  specialChallenges,
+} from '../data/specialChallenge';
 import type {
   CarProgressState,
   CharacterProgress,
@@ -9,19 +13,21 @@ import type {
   SavedProgressV2,
   SavedProgressV3,
   SavedProgressV4,
+  SavedProgressV5,
+  SavedProgressV6,
+  SavedProgressV7,
+  SpecialChallengeProgress,
 } from '../types/gameProgress';
 import { createDefaultSettings } from '../types/gameProgress';
 import type { WritingEvaluation } from '../types/writingEvaluation';
 import type { Car } from '../data/cars';
 import type { PassRewardResult } from '../types/gameProgress';
 import {
-  checkNewBadges,
   calculateTotalAttempts,
   createEmptyTodayStats,
   normalizeTodayStats,
-  recalculateBadges,
   updateTodayStatsAfterEvaluation,
-} from './badgeUtils';
+} from './statsUtils';
 import {
   getActiveCar,
   getNextUnlockedCar,
@@ -31,7 +37,7 @@ import {
 } from './carProgressUtils';
 
 export const STORAGE_KEY = 'hiragana-writing-practice-progress';
-const CURRENT_VERSION = 5 as const;
+const CURRENT_VERSION = 8 as const;
 
 const defaultCharacterProgress = (): CharacterProgress => ({
   attempts: 0,
@@ -43,6 +49,19 @@ const defaultCharacterProgress = (): CharacterProgress => ({
 
 function emptyCarProgress(): CarProgressState {
   return { completedCharacters: [], unlocked: false };
+}
+
+function emptySpecialChallengeProgress(): SpecialChallengeProgress {
+  return { completedCharacters: [], unlocked: false };
+}
+
+function createEmptySpecialChallenges(): Record<string, SpecialChallengeProgress> {
+  return Object.fromEntries(
+    specialChallenges.map((challenge) => [
+      challenge.id,
+      emptySpecialChallengeProgress(),
+    ]),
+  );
 }
 
 /** 初期進捗 */
@@ -65,11 +84,11 @@ export function createInitialProgress(): SavedProgress {
     activeCarId: firstCar?.id ?? '',
     cars: carProgress,
     characters,
-    badges: [],
     stats: {
       totalAttempts: 0,
       today: createEmptyTodayStats(),
     },
+    specialChallenges: createEmptySpecialChallenges(),
   };
 }
 
@@ -179,7 +198,7 @@ function buildCoreFromLegacy(
   carsData: unknown,
   charactersData: unknown,
   activeCarId?: string,
-): Omit<SavedProgress, 'version' | 'settings' | 'badges' | 'stats'> {
+): Pick<SavedProgress, 'activeCarId' | 'cars' | 'characters'> {
   const carsProgress: Record<string, CarProgressState> = {};
   for (const car of cars) {
     carsProgress[car.id] = sanitizeCarProgress(
@@ -241,7 +260,6 @@ function migrateFromV1(data: SavedProgressV1): SavedProgress {
   return finalizeProgress({
     version: CURRENT_VERSION,
     settings: createDefaultSettings(true),
-    badges: [],
     stats: { totalAttempts: 0, today: createEmptyTodayStats() },
     ...core,
   });
@@ -268,7 +286,6 @@ function migrateFromV2(data: SavedProgressV2): SavedProgress {
   return finalizeProgress({
     version: CURRENT_VERSION,
     settings: createDefaultSettings(true),
-    badges: [],
     stats: {
       totalAttempts: calculateTotalAttempts(core.characters),
       today: createEmptyTodayStats(),
@@ -286,7 +303,6 @@ function migrateFromV3(data: SavedProgressV3): SavedProgress {
   return finalizeProgress({
     version: CURRENT_VERSION,
     settings: createDefaultSettings(true),
-    badges: [],
     stats: {
       totalAttempts: calculateTotalAttempts(core.characters),
       today: createEmptyTodayStats(),
@@ -295,7 +311,57 @@ function migrateFromV3(data: SavedProgressV3): SavedProgress {
   });
 }
 
-type ProgressInput = Omit<SavedProgress, 'version'> & { version?: number };
+type ProgressInput = Omit<SavedProgress, 'version' | 'specialChallenges'> & {
+  version?: number;
+  specialChallenges?: Record<string, SpecialChallengeProgress>;
+  /** version 6からの移行用 */
+  specialChallenge?: SpecialChallengeProgress;
+};
+
+function sanitizeSpecialChallenge(
+  raw: unknown,
+  validWord: readonly string[],
+): SpecialChallengeProgress {
+  const source =
+    raw && typeof raw === 'object'
+      ? (raw as Partial<SpecialChallengeProgress>)
+      : {};
+  const rawCharacters = Array.isArray(source.completedCharacters)
+    ? source.completedCharacters.filter(
+        (character): character is string => typeof character === 'string',
+      )
+    : [];
+  const completedCharacters: string[] = [];
+  for (let index = 0; index < validWord.length; index += 1) {
+    if (rawCharacters[index] !== validWord[index]) break;
+    completedCharacters.push(validWord[index]);
+  }
+  const unlocked =
+    source.unlocked === true || completedCharacters.length === validWord.length;
+  return {
+    completedCharacters: unlocked ? [...validWord] : completedCharacters,
+    unlocked,
+  };
+}
+
+function sanitizeSpecialChallenges(
+  raw: unknown,
+  legacyFirstChallenge?: unknown,
+): Record<string, SpecialChallengeProgress> {
+  const source =
+    raw && typeof raw === 'object'
+      ? (raw as Record<string, unknown>)
+      : {};
+  return Object.fromEntries(
+    specialChallenges.map((challenge, index) => [
+      challenge.id,
+      sanitizeSpecialChallenge(
+        source[challenge.id] ?? (index === 0 ? legacyFirstChallenge : undefined),
+        challenge.characters,
+      ),
+    ]),
+  );
+}
 
 function finalizeProgress(progress: ProgressInput): SavedProgress {
   const carsProgress: Record<string, CarProgressState> = {};
@@ -318,9 +384,6 @@ function finalizeProgress(progress: ProgressInput): SavedProgress {
     activeCarId: progress.activeCarId,
     cars: carsProgress,
     characters,
-    badges: Array.isArray(progress.badges)
-      ? progress.badges.filter((id) => typeof id === 'string')
-      : [],
     stats: {
       totalAttempts:
         typeof progress.stats?.totalAttempts === 'number'
@@ -328,16 +391,18 @@ function finalizeProgress(progress: ProgressInput): SavedProgress {
           : calculateTotalAttempts(characters),
       today: progress.stats?.today ?? createEmptyTodayStats(),
     },
+    specialChallenges: sanitizeSpecialChallenges(
+      progress.specialChallenges,
+      progress.specialChallenge,
+    ),
   };
 
-  const withBadges = {
+  const normalized = {
     ...draft,
     activeCarId: resolveActiveCarId(draft),
-    badges:
-      draft.badges.length > 0 ? draft.badges : recalculateBadges(draft),
   };
 
-  return normalizeTodayStats(withBadges);
+  return normalizeTodayStats(normalized);
 }
 
 export function loadProgress(): SavedProgress {
@@ -349,7 +414,7 @@ export function loadProgress(): SavedProgress {
     if (!parsed || typeof parsed !== 'object') return createInitialProgress();
 
     const data = parsed as Partial<
-      SavedProgress | SavedProgressV4 | SavedProgressV3 | SavedProgressV2 | SavedProgressV1
+      SavedProgress | SavedProgressV7 | SavedProgressV6 | SavedProgressV5 | SavedProgressV4 | SavedProgressV3 | SavedProgressV2 | SavedProgressV1
     >;
 
     if (data.version === 1) return migrateFromV1(data as SavedProgressV1);
@@ -359,6 +424,15 @@ export function loadProgress(): SavedProgress {
       return finalizeProgress(data as SavedProgressV4);
     }
     if (data.version === 5) {
+      return finalizeProgress(data as SavedProgressV5 as ProgressInput);
+    }
+    if (data.version === 6) {
+      return finalizeProgress(data as SavedProgressV6 as ProgressInput);
+    }
+    if (data.version === 7) {
+      return finalizeProgress(data as SavedProgressV7 as ProgressInput);
+    }
+    if (data.version === 8) {
       return finalizeProgress(data as SavedProgress);
     }
     return createInitialProgress();
@@ -383,6 +457,38 @@ export function updateSettings(
   const updated: SavedProgress = {
     ...progress,
     settings: { ...progress.settings, ...settings },
+  };
+  saveProgress(updated);
+  return updated;
+}
+
+/** スペシャルチャレンジで1文字合格した進捗を保存 */
+export function completeSpecialChallengeCharacter(
+  progress: SavedProgress,
+  challengeId: string,
+  character: string,
+): SavedProgress {
+  const challenge = getSpecialChallengeById(challengeId);
+  if (!challenge) return progress;
+  const challengeProgress =
+    progress.specialChallenges[challengeId] ?? emptySpecialChallengeProgress();
+  if (challengeProgress.unlocked) return progress;
+
+  const completed = challengeProgress.completedCharacters;
+  const expected = challenge.characters[completed.length];
+  if (character !== expected) return progress;
+
+  const completedCharacters = [...completed, character];
+  const updated: SavedProgress = {
+    ...progress,
+    specialChallenges: {
+      ...progress.specialChallenges,
+      [challengeId]: {
+        completedCharacters,
+        unlocked:
+          completedCharacters.length >= challenge.characters.length,
+      },
+    },
   };
   saveProgress(updated);
   return updated;
@@ -431,7 +537,6 @@ type ApplyEvaluationResult = {
   progress: SavedProgress;
   reward: PassRewardResult;
   helpModeActive: boolean;
-  newBadges: string[];
 };
 
 export function applyEvaluationResult({
@@ -508,15 +613,10 @@ export function applyEvaluationResult({
     reward,
   );
 
-  const badges = recalculateBadges(updatedProgress);
-  updatedProgress = { ...updatedProgress, badges };
-  const newBadges = checkNewBadges(before, updatedProgress, reward);
-
   return {
     progress: updatedProgress,
     reward,
     helpModeActive,
-    newBadges,
   };
 }
 
@@ -560,18 +660,6 @@ export function debugAddBlueprint(progress: SavedProgress): SavedProgress {
         unlocked,
       },
     },
-    badges: recalculateBadges({
-      ...progress,
-      cars: {
-        ...progress.cars,
-        [activeCar.id]: {
-          completedCharacters: unlocked
-            ? [...activeCar.requiredCharacters]
-            : completedCharacters,
-          unlocked,
-        },
-      },
-    }),
   };
   saveProgress(updated);
   return updated;
@@ -589,7 +677,6 @@ export function debugCompleteActiveCar(progress: SavedProgress): SavedProgress {
       },
     },
   };
-  updated.badges = recalculateBadges(updated);
   saveProgress(updated);
   return updated;
 }
@@ -615,20 +702,6 @@ export function debugCompleteAllCars(progress: SavedProgress): SavedProgress {
     ...progress,
     cars: carsProgress,
     activeCarId: lastCar?.id ?? progress.activeCarId,
-  };
-  updated.badges = recalculateBadges(updated);
-  saveProgress(updated);
-  return updated;
-}
-
-export function debugGrantBadge(
-  progress: SavedProgress,
-  badgeId: string,
-): SavedProgress {
-  if (progress.badges.includes(badgeId)) return progress;
-  const updated = {
-    ...progress,
-    badges: [...progress.badges, badgeId],
   };
   saveProgress(updated);
   return updated;

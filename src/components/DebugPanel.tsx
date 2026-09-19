@@ -1,6 +1,5 @@
 import type { Difficulty } from '../config/difficultyConfig';
 import { difficultyPresets } from '../config/difficultyConfig';
-import { badges } from '../data/badges';
 import type { SavedProgress } from '../types/gameProgress';
 import { useSound } from '../context/SoundProvider';
 import {
@@ -50,16 +49,6 @@ export function DebugPanel({
     onProgressChange(updateSettings(progress, { difficulty }));
   };
 
-  const handleGrantBadge = (badgeId: string) => {
-    if (progress.badges.includes(badgeId)) {
-      return;
-    }
-    onProgressChange({
-      ...progress,
-      badges: [...progress.badges, badgeId],
-    });
-  };
-
   return (
     <div className="debug-panel" aria-label="デバッグ操作">
       <p className="debug-panel-title">debug 操作</p>
@@ -74,7 +63,6 @@ export function DebugPanel({
           今日: かいた {progress.stats.today.attempts} / できた {progress.stats.today.passed} /
           はなまる {progress.stats.today.excellent}
         </p>
-        <p>バッジ: {progress.badges.join(', ') || 'なし'}</p>
       </div>
 
       <div className="debug-panel-buttons">
@@ -168,20 +156,6 @@ export function DebugPanel({
             onClick={() => handleDifficultyChange(key)}
           >
             {difficultyPresets[key].label}
-          </button>
-        ))}
-      </div>
-
-      <div className="debug-panel-badges">
-        <p>バッジ付与</p>
-        {badges.map((badge) => (
-          <button
-            key={badge.id}
-            type="button"
-            className="debug-panel-button"
-            onClick={() => handleGrantBadge(badge.id)}
-          >
-            {badge.name}
           </button>
         ))}
       </div>

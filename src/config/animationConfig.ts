@@ -26,8 +26,6 @@ export const animationConfig = {
   carComplete: 1600,
   /** ガレージ登録演出 */
   garageRegister: 350,
-  /** バッジ解除 */
-  badgeUnlock: 1500,
   /** トースト非表示 */
   toastHide: 3000,
   /** セッション目標 */

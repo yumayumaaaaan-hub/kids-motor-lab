@@ -42,22 +42,6 @@
   flex-shrink: 0;
 }
 
-.garage-badge-button {
-  min-height: 44px;
-  padding: 8px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: var(--radius-small);
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: var(--font-weight-medium);
-  cursor: pointer;
-}
-
-.garage-badge-button:active {
-  background: rgba(255, 255, 255, 0.16);
-}
-
 .garage-title {
   margin: 0;
   font-size: clamp(1.2rem, 4.8vw, 1.5rem);
@@ -145,7 +129,7 @@
 
 .garage-tabs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   padding: 4px;
   border-radius: var(--radius-medium);
@@ -174,6 +158,16 @@
   background: var(--color-signal-orange);
   color: #fff;
   box-shadow: var(--shadow-button-primary);
+}
+
+.garage-tab--special {
+  color: #7a5000;
+}
+
+.garage-tab--special.garage-tab--active {
+  color: #382200;
+  background: linear-gradient(180deg, #fff09a, #e7ad20);
+  box-shadow: 0 4px 0 #9a6800;
 }
 
 .garage-tab--locked:not(.garage-tab--active) {
@@ -219,6 +213,159 @@
   font-weight: var(--font-weight-normal);
   line-height: 1.5;
   color: rgba(15, 35, 64, 0.68);
+}
+
+.garage-special-panel {
+  padding: 20px 14px 28px;
+  border: 2px solid #deb139;
+  border-radius: 24px;
+  color: #fff5c9;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255, 220, 96, 0.3), transparent 30%),
+    linear-gradient(145deg, #171003, #4b3000 52%, #130d02);
+  box-shadow: 0 16px 36px rgba(52, 33, 0, 0.22);
+}
+
+.garage-special-panel h2 {
+  margin: 0 0 14px;
+  font-size: clamp(1.35rem, 5vw, 1.8rem);
+}
+
+.garage-special-kicker {
+  margin: 0;
+  color: #ffdd65;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.garage-special-count {
+  margin: -4px 0 16px;
+  color: #ffe9a4;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.garage-special-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.garage-special-card {
+  width: 100%;
+  max-width: 470px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 14px 14px 20px;
+  border: 1px solid rgba(255, 225, 127, 0.5);
+  border-radius: 22px;
+  background: rgba(8, 5, 0, 0.48);
+}
+
+.garage-special-level {
+  margin-bottom: 8px !important;
+  color: #ffe583;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.garage-special-card-image {
+  min-height: 190px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: linear-gradient(140deg, rgba(255, 238, 155, 0.17), rgba(0, 0, 0, 0.45));
+}
+
+.garage-special-card:not(.is-complete) .car-image {
+  opacity: 0.72;
+  filter:
+    brightness(0.42)
+    saturate(0.45)
+    sepia(0.72)
+    drop-shadow(0 10px 12px rgba(255, 210, 72, 0.32));
+}
+
+.garage-special-card h3 {
+  margin: 0 0 8px;
+  color: #fff2ac;
+  font-size: 1.3rem;
+}
+
+.garage-special-card p {
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+
+.garage-special-card button {
+  min-width: 200px;
+  min-height: 50px;
+  border: 0;
+  border-radius: 999px;
+  color: #382300;
+  background: linear-gradient(#fff29a, #e8ad1f);
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #8e5c00;
+}
+
+.garage-special-maker,
+.garage-special-status {
+  color: #f5ca4e;
+  font-weight: 900;
+}
+
+.garage-special-progress {
+  width: min(100%, 300px);
+  height: 10px;
+  margin: 14px auto 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.garage-special-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #d89400, #fff079);
+}
+
+@media (max-width: 540px) {
+  .garage-tab {
+    min-height: 44px;
+    padding: 8px 4px;
+    font-size: 0.84rem;
+  }
+
+  .garage-special-panel {
+    padding: 16px 10px 22px;
+  }
+
+  .garage-special-grid {
+    gap: 12px;
+  }
+
+  .garage-special-card {
+    padding: 10px 10px 16px;
+  }
+
+  .garage-special-card-image {
+    min-height: 145px;
+    margin-bottom: 10px;
+  }
+
+  .garage-special-card h3 {
+    font-size: 1.15rem;
+  }
+}
+
+@media (min-width: 820px) {
+  .garage-special-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 768px) {

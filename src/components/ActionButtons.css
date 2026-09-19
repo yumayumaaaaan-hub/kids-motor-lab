@@ -66,23 +66,6 @@
   box-shadow: inset 0 0 0 1px var(--color-border);
 }
 
-.stroke-order-toggle {
-  width: 100%;
-  min-height: 48px;
-}
-
-.action-button.stroke-order-toggle.is-on {
-  background: var(--color-blueprint-100);
-  color: var(--color-blueprint-600);
-  box-shadow: inset 0 0 0 1px var(--color-blueprint-600);
-}
-
-.action-button.stroke-order-toggle.is-off {
-  background: var(--color-surface);
-  color: var(--color-navy-700);
-  box-shadow: inset 0 0 0 1px var(--color-border);
-}
-
 .guide-toggle-label {
   white-space: nowrap;
 }

@@ -199,19 +199,15 @@ export function evaluateWriting({
     resampleReferenceStroke(stroke, settings.sampleCount),
   );
 
-  const pairCount = Math.max(
-    resampledUser.length,
-    resampledReference.length,
-    expectedStrokeCount,
-  );
+  // 期待画数を基準に平均する（不足分は0点として扱い、適当な1画だけ書いても合格しにくくする）
+  const strokeSlots = Math.max(expectedStrokeCount, 1);
 
   let shapeTotal = 0;
   let coverageTotal = 0;
   let startEndTotal = 0;
   let directionTotal = 0;
-  let comparedPairs = 0;
 
-  for (let index = 0; index < pairCount; index += 1) {
+  for (let index = 0; index < strokeSlots; index += 1) {
     const user = resampledUser[index];
     const reference = resampledReference[index];
 
@@ -220,7 +216,10 @@ export function evaluateWriting({
     }
 
     const shapeDistance = bidirectionalDistance(user, reference);
-    shapeTotal += distanceScore(shapeDistance / DIAGONAL, 0.18 * distanceScale);
+    shapeTotal += distanceScore(
+      shapeDistance / DIAGONAL,
+      config.shapeDistanceRadius * distanceScale,
+    );
 
     const nearRatio =
       user.filter((point) =>
@@ -255,11 +254,9 @@ export function evaluateWriting({
         direction: { x: 0, y: 0 },
       },
     );
-
-    comparedPairs += 1;
   }
 
-  const divisor = Math.max(comparedPairs, 1);
+  const divisor = strokeSlots;
   const shapeRatio = shapeTotal / divisor;
   const coverageRatio = coverageTotal / divisor;
   const startEndRatio = startEndTotal / divisor;
@@ -283,7 +280,12 @@ export function evaluateWriting({
 
   const passThreshold = settings.passThreshold;
   const excellentThreshold = settings.excellentThreshold;
-  const passed = score >= passThreshold;
+  const meetsShapeRequirement = shapeRatio >= config.minShapeRatio;
+  const meetsCoverageRequirement = coverageRatio >= config.minCoverageRatio;
+  const passed =
+    score >= passThreshold &&
+    meetsShapeRequirement &&
+    meetsCoverageRequirement;
 
   let grade: WritingGrade = 'retry';
   if (score >= excellentThreshold) {

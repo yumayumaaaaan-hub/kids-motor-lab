@@ -13,9 +13,9 @@ export type DifficultyPreset = {
 export const difficultyPresets: Record<Difficulty, DifficultyPreset> = {
   easy: {
     label: 'やさしい',
-    passThreshold: writingEvaluationConfig.grades.pass - 5,
-    distanceScale: 1.12,
-    strokeCountPenaltyScale: 0.7,
+    passThreshold: writingEvaluationConfig.grades.pass - 4,
+    distanceScale: 1.05,
+    strokeCountPenaltyScale: 0.85,
   },
   normal: {
     label: 'ふつう',
@@ -26,9 +26,9 @@ export const difficultyPresets: Record<Difficulty, DifficultyPreset> = {
   hard: {
     label: 'しっかり',
     passThreshold: writingEvaluationConfig.grades.pass + 5,
-    distanceScale: 0.92,
-    strokeCountPenaltyScale: 1.25,
+    distanceScale: 0.9,
+    strokeCountPenaltyScale: 1.3,
   },
 };
 
-export const defaultDifficulty: Difficulty = 'easy';
+export const defaultDifficulty: Difficulty = 'normal';

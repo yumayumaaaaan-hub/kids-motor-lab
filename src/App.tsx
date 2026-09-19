@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { BadgeCollection, BadgeUnlockOverlay } from './components/BadgeCollection';
 import { Chapter2UnlockOverlay } from './components/Chapter2UnlockOverlay';
 import { DebugPanel } from './components/DebugPanel';
 import { EvaluationOverlay } from './components/EvaluationOverlay';
@@ -7,6 +6,7 @@ import { GameToast } from './components/GameToast';
 import { GarageScreen } from './components/GarageScreen';
 import { NextCarIntro } from './components/NextCarIntro';
 import { PlayScreen } from './components/play/PlayScreen';
+import { SpecialChallengeScreen } from './components/SpecialChallengeScreen';
 import type { AcquirePulseToken } from './components/play/VehicleBuildStatus';
 import { PlayTopBar } from './components/PlayTopBar';
 import { MotorLabBrand } from './components/art/MotorLabBrand';
@@ -24,13 +24,20 @@ import type { Car } from './data/cars';
 import {
   activateNextCar,
   applyEvaluationResult,
+  completeSpecialChallengeCharacter,
   loadProgress,
   resetProgress,
   saveProgress,
   setActiveCarId,
   updateSettings,
 } from './utils/carProgressStorage';
-import { getActiveCar, isCarCompleted, isTier2Unlocked } from './utils/carProgressUtils';
+import {
+  getActiveCar,
+  getCompletedCarCount,
+  isCarCompleted,
+  isTier2Unlocked,
+} from './utils/carProgressUtils';
+import { getSpecialChallengeById } from './data/specialChallenge';
 import { getEvaluationParams } from './utils/difficultyUtils';
 import { useCarProgress } from './hooks/useCarProgress';
 import {
@@ -77,14 +84,13 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
   const { play, unlock } = useSound();
 
   const [screen, setScreen] = useState<AppScreen>('writing');
+  const [selectedSpecialChallengeId, setSelectedSpecialChallengeId] =
+    useState<string | null>(null);
   const [showNextCarIntro, setShowNextCarIntro] = useState<Car | null>(null);
 
   const [tutorialStep, setTutorialStep] = useState<TutorialStep | null>(() =>
     savedProgress.settings.tutorialCompleted ? null : 1,
   );
-  const [showBadgeCollection, setShowBadgeCollection] = useState(false);
-  const [badgeUnlockIds, setBadgeUnlockIds] = useState<string[] | null>(null);
-  const [pendingBadges, setPendingBadges] = useState<string[]>([]);
   const pendingChapter2UnlockRef = useRef(false);
   const [showChapter2Unlock, setShowChapter2Unlock] = useState(false);
   const [showClearToast, setShowClearToast] = useState(false);
@@ -160,10 +166,12 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
     setScreenFadeKey((key) => key + 1);
   }, [screen]);
 
-  // 1回でもまちがえたら、お手本をオフにできないようにする
+  // 1回でもまちがえたら、お手本とかきじゅんを自動表示する
   useEffect(() => {
     if (helpModeActive) {
       setShowGuide(true);
+      setShowStrokeOrder(true);
+      setAnimateGuide(false);
     }
   }, [helpModeActive]);
 
@@ -211,20 +219,6 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
       setShowChapter2Unlock(true);
     }
   }, []);
-
-  const flushBadgeQueue = useCallback(() => {
-    if (pendingBadges.length > 0) {
-      setBadgeUnlockIds([...pendingBadges]);
-      setPendingBadges([]);
-      return;
-    }
-    showChapter2UnlockIfPending();
-  }, [pendingBadges, showChapter2UnlockIfPending]);
-
-  const handleBadgeUnlockDismiss = useCallback(() => {
-    setBadgeUnlockIds(null);
-    showChapter2UnlockIfPending();
-  }, [showChapter2UnlockIfPending]);
 
   const handleChapter2UnlockDismiss = useCallback(() => {
     setShowChapter2Unlock(false);
@@ -298,7 +292,7 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
         : null;
 
     closeEvaluation();
-    flushBadgeQueue();
+    showChapter2UnlockIfPending();
     clearStrokes();
     setShowGuide(true);
 
@@ -328,21 +322,21 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
     clearStrokes,
     closeEvaluation,
     evaluationResult,
-    flushBadgeQueue,
     savedProgress,
+    showChapter2UnlockIfPending,
     setSavedProgress,
     syncBuildCharacter,
   ]);
 
   const handleGoGarage = useCallback(() => {
     closeEvaluation();
-    flushBadgeQueue();
+    showChapter2UnlockIfPending();
     setScreen('garage');
-  }, [closeEvaluation, flushBadgeQueue]);
+  }, [closeEvaluation, showChapter2UnlockIfPending]);
 
   const handleStartNextCar = useCallback(() => {
     closeEvaluation();
-    flushBadgeQueue();
+    showChapter2UnlockIfPending();
     const nextCar = nextCarAfterComplete;
     if (!nextCar) {
       return;
@@ -355,8 +349,8 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
     setShowNextCarIntro(nextCar);
   }, [
     closeEvaluation,
-    flushBadgeQueue,
     nextCarAfterComplete,
+    showChapter2UnlockIfPending,
     resetPracticeSurface,
     savedProgress,
     setSavedProgress,
@@ -375,6 +369,19 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
       syncBuildCharacter(updated, car);
     },
     [savedProgress, setSavedProgress, syncBuildCharacter],
+  );
+
+  const handleSpecialCharacterPassed = useCallback(
+    (challengeId: string, character: string) => {
+      play('passed');
+      const updated = completeSpecialChallengeCharacter(
+        savedProgress,
+        challengeId,
+        character,
+      );
+      setSavedProgress(updated);
+    },
+    [play, savedProgress, setSavedProgress],
   );
 
   const handleStrokeStart = useCallback(() => {
@@ -413,40 +420,18 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
 
   const handleRetry = useCallback(() => {
     closeEvaluation();
-    flushBadgeQueue();
-    resetPracticeSurface();
-  }, [closeEvaluation, flushBadgeQueue, resetPracticeSurface]);
-
-  const handleShowGuideFromEvaluation = useCallback(() => {
-    closeEvaluation();
-    flushBadgeQueue();
+    showChapter2UnlockIfPending();
     setShowStrokeOrder(true);
     setShowGuide(true);
     setAnimateGuide(false);
-  }, [closeEvaluation, flushBadgeQueue]);
+    clearStrokes();
+    setStrokesUndoSnapshot(null);
+    setShowClearToast(false);
+  }, [closeEvaluation, showChapter2UnlockIfPending, clearStrokes]);
 
   const handleAnimationComplete = useCallback(() => {
     setAnimateGuide(false);
   }, []);
-
-  const handlePlayGuideAnimation = useCallback(() => {
-    play('button');
-    setShowStrokeOrder(true);
-    setShowGuide(true);
-    setAnimateGuide(false);
-  }, [play]);
-
-  const handleToggleStrokeOrder = useCallback(() => {
-    play('button');
-    setShowStrokeOrder((previous) => {
-      const next = !previous;
-      if (next) {
-        setShowGuide(true);
-        setAnimateGuide(false);
-      }
-      return next;
-    });
-  }, [play]);
 
   const handleComplete = useCallback(async () => {
     if (!canComplete || isEvaluating || completeInFlightRef.current) {
@@ -484,7 +469,7 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
 
       const wasTier2Locked = !isTier2Unlocked(savedProgress);
 
-      const { progress, reward, helpModeActive: helpAfter, newBadges } =
+      const { progress, reward, helpModeActive: helpAfter } =
         applyEvaluationResult({
           progress: savedProgress,
           character: currentHiragana.character,
@@ -502,13 +487,11 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
 
       setSavedProgress(progress);
       saveProgress(progress);
-      setPendingBadges(newBadges);
       setEvaluationResult({
         evaluation,
         reward,
         character: currentHiragana.character,
         helpModeActive: helpAfter,
-        newBadges,
       });
       setShowEvaluation(true);
     } catch {
@@ -527,7 +510,6 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
         reward: { kind: 'none' },
         character: currentHiragana.character,
         helpModeActive,
-        newBadges: [],
       });
       setShowEvaluation(true);
     } finally {
@@ -609,6 +591,33 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
     showEvaluation || (isDebugMode && debugEvaluationPreview !== null);
 
   const evaluationResultToShow = debugEvaluationPreview ?? evaluationResult;
+  const selectedSpecialChallenge = selectedSpecialChallengeId
+    ? getSpecialChallengeById(selectedSpecialChallengeId)
+    : undefined;
+
+  if (
+    screen === 'special' &&
+    selectedSpecialChallenge &&
+    getCompletedCarCount(savedProgress) >=
+      selectedSpecialChallenge.unlockAtCarCount
+  ) {
+    return (
+      <div className="app app-screen-fade" key={`screen-${screenFadeKey}`}>
+        <SpecialChallengeScreen
+          challenge={selectedSpecialChallenge}
+          progress={
+            savedProgress.specialChallenges[selectedSpecialChallenge.id] ?? {
+              completedCharacters: [],
+              unlocked: false,
+            }
+          }
+          settings={savedProgress.settings}
+          onCharacterPassed={handleSpecialCharacterPassed}
+          onBack={() => setScreen('garage')}
+        />
+      </div>
+    );
+  }
 
   if (screen === 'garage') {
     return (
@@ -628,16 +637,13 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
             isDebugMode={isDebugMode}
             onBackToWriting={navigateToWriting}
             onSelectActiveCar={handleSelectActiveCar}
-            onOpenBadges={() => setShowBadgeCollection(true)}
+            onOpenSpecialChallenge={(challengeId) => {
+              setSelectedSpecialChallengeId(challengeId);
+              setScreen('special');
+            }}
             garageCardPreview={debugUiPreview.garageCardPreview}
             carImagePreview={debugUiPreview.carImagePreview}
           />
-          {showBadgeCollection && (
-            <BadgeCollection
-              earnedBadgeIds={savedProgress.badges}
-              onClose={() => setShowBadgeCollection(false)}
-            />
-          )}
         </main>
       </div>
     );
@@ -678,9 +684,6 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
             showStrokeOrder={showStrokeOrder}
             helpModeActive={helpModeActive}
             helpHint="ここから かこう！"
-            strokeOrderButtonVisible={
-              helpModeActive || effectiveTutorialStep !== null
-            }
             canComplete={canComplete}
             isEvaluating={isEvaluating}
             animateGuide={animateGuide && !showStrokeOrder}
@@ -702,8 +705,6 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
             onComplete={() => {
               void handleComplete();
             }}
-            onPlayGuideAnimation={handlePlayGuideAnimation}
-            onToggleStrokeOrder={handleToggleStrokeOrder}
             onDrawingStateChange={handleDrawingStateChange}
             onStrokeStart={handleStrokeStart}
             onStrokeComplete={handleStrokeComplete}
@@ -731,7 +732,6 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
         nextCar={nextCarAfterComplete}
         isAllCarsComplete={allCarsComplete}
         onRetry={handleRetry}
-        onShowGuide={handleShowGuideFromEvaluation}
         onNext={() => {
           if (debugEvaluationPreview) {
             setDebugUiPreview((prev) => ({ ...prev, evaluationPreview: null }));
@@ -762,13 +762,6 @@ function AppContent({ progress: savedProgress, setProgress: setSavedProgress }: 
           actionLabel="もとにもどす"
           onAction={handleUndoClear}
           onDismiss={() => setShowClearToast(false)}
-        />
-      )}
-
-      {badgeUnlockIds && (
-        <BadgeUnlockOverlay
-          badgeIds={badgeUnlockIds}
-          onDismiss={handleBadgeUnlockDismiss}
         />
       )}
 

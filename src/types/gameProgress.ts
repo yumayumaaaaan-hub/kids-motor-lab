@@ -74,19 +74,56 @@ export type SavedProgressV4 = {
   activeCarId: string;
   cars: Record<string, CarProgressState>;
   characters: Record<string, CharacterProgress>;
-  badges: string[];
   stats: GameStats;
 };
 
-/** localStorage version 5（現在） */
-export type SavedProgress = {
+/** localStorage version 5（移行用） */
+export type SavedProgressV5 = {
   version: 5;
   settings: GameSettings;
   activeCarId: string;
   cars: Record<string, CarProgressState>;
   characters: Record<string, CharacterProgress>;
-  badges: string[];
   stats: GameStats;
+};
+
+/** 1つのスペシャルチャレンジ進捗 */
+export type SpecialChallengeProgress = {
+  completedCharacters: string[];
+  unlocked: boolean;
+};
+
+/** localStorage version 6（移行用） */
+export type SavedProgressV6 = {
+  version: 6;
+  settings: GameSettings;
+  activeCarId: string;
+  cars: Record<string, CarProgressState>;
+  characters: Record<string, CharacterProgress>;
+  stats: GameStats;
+  specialChallenge: SpecialChallengeProgress;
+};
+
+/** localStorage version 7（移行用） */
+export type SavedProgressV7 = {
+  version: 7;
+  settings: GameSettings;
+  activeCarId: string;
+  cars: Record<string, CarProgressState>;
+  characters: Record<string, CharacterProgress>;
+  stats: GameStats;
+  specialChallenges: Record<string, SpecialChallengeProgress>;
+};
+
+/** localStorage version 8（現在） */
+export type SavedProgress = {
+  version: 8;
+  settings: GameSettings;
+  activeCarId: string;
+  cars: Record<string, CarProgressState>;
+  characters: Record<string, CharacterProgress>;
+  stats: GameStats;
+  specialChallenges: Record<string, SpecialChallengeProgress>;
 };
 
 /** ガレージ表示用の車状態 */
@@ -112,11 +149,10 @@ export type EvaluationDisplayResult = {
   reward: PassRewardResult;
   character: string;
   helpModeActive: boolean;
-  newBadges: string[];
 };
 
 /** 画面切り替え */
-export type AppScreen = 'writing' | 'garage' | 'badges';
+export type AppScreen = 'writing' | 'garage' | 'special';
 
 /** デフォルト設定 */
 export function createDefaultSettings(existingUser = false): GameSettings {
@@ -124,6 +160,6 @@ export function createDefaultSettings(existingUser = false): GameSettings {
     tutorialCompleted: existingUser,
     soundEnabled: true,
     volume: 60,
-    difficulty: 'easy',
+    difficulty: 'normal',
   };
 }
